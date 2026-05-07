@@ -21,6 +21,7 @@ async def get_files(session: ClientSession, path: str):
             path + f["name"] for f in files
             if not 'particles' in (path + f["name"])
             and (path + f["name"]).endswith('.png')
+            and not ('summoneremotes' in (path + f["name"]) and not '_inventory' in f["name"])
         )
 
         directories = [d for d in data if d["type"] == "directory"]
@@ -59,7 +60,6 @@ async def main():
     async with ClientSession() as session:
         await get_files(session, "")
         print(f"Found {len(files_to_download)} files")
-
         tasks = [download_file(session, sem, f) for f in files_to_download]
         await gather(*tasks)
 
