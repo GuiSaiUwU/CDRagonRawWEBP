@@ -31,14 +31,26 @@ jobs:
       - name: Run asset updater
         run: python main.py
 
+      - name: Checkout data repo
+        uses: actions/checkout@v4
+        with:
+          repository: GuiSaiUwU/CDRagonRawWEBPData
+          token: ${{ secrets.ASSETS_REPO_TOKEN }}
+          path: data-repo
+
+      - name: Sync assets to data repo
+        run: |
+          mkdir -p data-repo/assets
+          rsync -a --delete assets/ data-repo/assets/
+
       - name: Commit and push changes
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets
-          if git diff --cached --quiet; then
+          git -C data-repo config user.name "github-actions[bot]"
+          git -C data-repo config user.email "github-actions[bot]@users.noreply.github.com"
+          git -C data-repo add assets
+          if git -C data-repo diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
           fi
-          git commit -m "chore: update assets"
-          git push
+          git -C data-repo commit -m "chore: update assets"
+          git -C data-repo push
