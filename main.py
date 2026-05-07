@@ -31,7 +31,7 @@ async def get_files(session: ClientSession, path: str):
 def _sync_convert(data: bytes, output_path: Path):
     image = Image.open(BytesIO(data))
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    image.save(output_path, "WEBP", lossless=True)
+    image.save(output_path, "WEBP", quality=85, method=6)
 
 
 async def download_file(session: ClientSession, sem: Semaphore, relative_path: str):
