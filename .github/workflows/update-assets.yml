@@ -2,8 +2,8 @@ name: Update assets
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 1,15 * *'
+#  schedule:
+#    - cron: '0 0 1,15 * *'
 
 permissions:
   contents: write
